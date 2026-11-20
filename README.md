@@ -4,6 +4,10 @@ Nexora Launcher is an independent project exploring a launcher experience for Mi
 
 > **Project status:** Early development. This repository does not yet contain an application implementation or documented install and build process.
 
+## Architecture
+
+The project has selected **C++23, Qt 6, CMake, and QML (Qt Quick)** as its application stack, targeting Windows, Linux, and macOS. See the [architecture overview](docs/architecture.md) for the rationale, boundaries, and validation requirements.
+
 ## Getting Started
 
 There is no runnable release or development setup available yet. Setup instructions will be added when the application and its toolchain are in place.
