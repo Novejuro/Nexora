@@ -22,13 +22,8 @@ jobs:
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
-      - run: cmake -S . -B build/obj -G Ninja
-      - run: cmake --build build/obj --parallel
-      - name: Run executable outside the checkout
-        shell: pwsh
-        run: |
-          Set-Location $env:RUNNER_TEMP
-          & "$env:GITHUB_WORKSPACE/build/Nexora.exe"
+      - run: cmake --preset Release
+      - run: cmake --build --preset Release --parallel
 
   linux:
     runs-on: ubuntu-latest
@@ -41,7 +36,18 @@ jobs:
           cmake-version: '4.0.x'
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y ninja-build g++ xorg-dev libgl1-mesa-dev
-      - run: cmake -S . -B build/obj -G Ninja
-      - run: cmake --build build/obj --parallel
-      - name: Run executable outside the checkout
-        run: cd "$RUNNER_TEMP" && "$GITHUB_WORKSPACE/build/Nexora"
+      - run: cmake --preset Release
+      - run: cmake --build --preset Release --parallel
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.0.x'
+      - run: brew install ninja
+      - run: cmake --preset Release
+      - run: cmake --build --preset Release --parallel
