@@ -1,3 +1,25 @@
+# Build and package output
 /build/
-CMakeUserPresets.json
+/out/
+/cmake-build-*/
+
+# CMake and Ninja files from in-source builds
+/CMakeCache.txt
+/CMakeFiles/
+/CMakeScripts/
+/CMakeUserPresets.json
+/CTestTestfile.cmake
+/Testing/
+/cmake_install.cmake
+/compile_commands.json
+/build.ninja
+/.ninja_deps
+/.ninja_log
+
+# Local IDE and OS files
+/.vs/
+/.idea/
 *.user
+.DS_Store
+Thumbs.db
+Desktop.ini

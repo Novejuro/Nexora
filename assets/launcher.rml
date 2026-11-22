@@ -1,0 +1,84 @@
+<rml>
+    <head>
+        <title>Nexora Launcher</title>
+        <link type="text/rcss" href="launcher.rcss" />
+    </head>
+    <body>
+        <div class="shell">
+            <div class="sidebar">
+                <div class="brand">
+                    <span class="brand-mark">N</span>
+                    <span>Nexora<small>LAUNCHER</small></span>
+                </div>
+                <div class="nav-label">WORKSPACE</div>
+                <button id="nav-play" class="nav active" data-page="play">Play</button>
+                <button id="nav-games" class="nav" data-page="games">Game downloads</button>
+                <button id="nav-mods" class="nav" data-page="mods">Mod downloads</button>
+                <div class="sidebar-footer">
+                    <div class="preview-dot"></div>
+                    <span>Local preview</span>
+                </div>
+            </div>
+            <div class="main">
+                <div class="topbar"><span class="topbar-brand">WORKSPACE</span><span class="slash">/</span><span id="breadcrumb">Play</span></div>
+                <div id="page-play" class="page">
+                    <div id="play-hero" class="hero">
+                        <div class="hero-content">
+                            <div class="eyebrow">MINECRAFT JAVA EDITION</div>
+                            <h1>Your next world</h1>
+                            <p>Choose a version from your library and get ready to play.</p>
+                        </div>
+                    </div>
+                    <div class="launch-panel">
+                        <div class="launch-pick">
+                            <label for="play-instance">VERSION TO LAUNCH</label>
+                            <select id="play-instance"></select>
+                        </div>
+                        <button id="launch-button" class="primary launch" data-action="launch">Launch game</button>
+                    </div>
+                    <div class="section-heading">
+                        <h2>Version library</h2><span class="muted">Sample instances</span>
+                    </div>
+                    <div id="instance-list" class="list"></div>
+                </div>
+                <div id="page-games" class="page hidden">
+                    <div class="page-heading">
+                        <div class="eyebrow">MINECRAFT JAVA EDITION</div>
+                        <h1>Game downloads</h1>
+                        <p>Browse sample releases and snapshots for a new instance.</p>
+                    </div>
+                    <div class="toolbar">
+                        <div class="field grow">
+                            <label for="game-search">SEARCH VERSIONS</label>
+                            <input id="game-search" type="text" placeholder="Search by version" />
+                        </div>
+                        <div class="field filter">
+                            <label for="game-channel">CHANNEL</label>
+                            <select id="game-channel"><option value="">All channels</option><option value="Release">Release</option><option value="Snapshot">Snapshot</option></select>
+                        </div>
+                    </div>
+                    <div id="game-list" class="list"></div>
+                </div>
+                <div id="page-mods" class="page hidden">
+                    <div class="page-heading">
+                        <div class="eyebrow">CUSTOMIZE YOUR INSTANCE</div>
+                        <h1>Mod downloads</h1>
+                        <p>Browse sample mods by loader for the instance you select.</p>
+                    </div>
+                    <div class="toolbar">
+                        <div class="field grow">
+                            <label for="mod-search">SEARCH MODS</label>
+                            <input id="mod-search" type="text" placeholder="Search by name or description" />
+                        </div>
+                        <div class="field target">
+                            <label for="mod-instance">TARGET INSTANCE</label>
+                            <select id="mod-instance"></select>
+                        </div>
+                    </div>
+                    <div id="mod-list" class="list"></div>
+                </div>
+                <div id="status" class="status">Preview mode. Launch and download actions use sample data.</div>
+            </div>
+        </div>
+    </body>
+</rml>

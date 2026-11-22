@@ -1,10 +1,10 @@
 # Nexora Launcher
 
-Nexora Launcher is an independent early-stage project for a Minecraft launcher. The project is currently building its application and dependency architecture; feature implementation is the next stage. The only application code today is a minimal C++ entry point that prints a message and exits. There is no launcher interface or Minecraft workflow yet.
+Nexora Launcher is an independent early-stage project for Minecraft Java Edition. The desktop preview includes version selection, a game catalog, and a mod catalog. The catalogs use sample data, and launch and download actions display preview feedback.
 
 ## Project status
 
-The repository has a CMake-based C++23 build, a Release preset using Ninja and `clang++`, and vendored Git submodules for RmlUi and FreeType. These dependencies are present in the build configuration, but the application does not use them yet. Window management, rendering, launcher layers, account management, game installation, Java runtime handling, and game launching have not been implemented.
+The desktop preview uses RmlUi and FreeType with Win32 or Linux X11 and OpenGL. The C++ launcher service interface provides integration points for listing instances and catalogs, launching games, and downloading games and mods.
 
 See [docs/architecture.md](docs/architecture.md) for the current foundation, intended boundaries, and work remaining before feature development.
 
@@ -16,6 +16,9 @@ Requirements:
 - Ninja
 - A C++23-capable compiler (`clang++` is selected by the supplied preset)
 - Initialized Git submodules (`include/rmlui` and `include/freetype`)
+- OpenGL development files and, on Linux, X11 development files
+
+On Windows with Visual Studio Build Tools, run these commands in a developer shell with Clang and Ninja on `PATH`.
 
 Configure and build the Release preset from the repository root:
 
@@ -24,7 +27,11 @@ cmake --preset Release
 cmake --build --preset Release --parallel
 ```
 
-The build tree is `build/obj/`. The current executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it prints `This is Nexora Launcher!` and exits. The preset has not yet been validated as a supported build configuration across platforms; platform support will be documented after builds are tested.
+Run `build/Nexora` (or `build/Nexora.exe` on Windows) to open the preview. Keep the generated `assets/` directory next to the executable.
+
+For a Debug build, run `cmake --preset Debug` and `cmake --build --preset Debug --parallel`. The executable is written to `build/debug/`.
+
+To stage the Release preview for a ZIP archive, run `cmake --install build/obj --component Nexora --prefix build/package/Nexora`. The staged directory contains the executable, assets, and license notices.
 
 If the submodules were not initialized during clone, run:
 

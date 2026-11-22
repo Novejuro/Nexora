@@ -2,18 +2,18 @@
 
 ## Current status
 
-Nexora is in the architecture and project-foundation stage. The repository establishes a CMake build, a C++23 language baseline, output-directory conventions, a Ninja Release preset, and source dependencies. The application entry point is currently a minimal console program. No desktop window, launcher UI, or Minecraft-related behavior has been implemented. The next stage is to begin application code on top of this foundation.
+Nexora has a native desktop preview for version selection, game downloads, and mod downloads. It displays sample instances and catalogs. The preview adapter reports that launch and download operations are unavailable.
 
-Dependency presence in the build does not imply application integration: the current application target does not yet use RmlUi or FreeType. There is no windowing or graphics dependency configured at the application level.
+The RmlUi document and styles live under `assets/`. `LauncherUi` translates input into calls to `LauncherServices`. `PreviewServices` supplies sample data and feedback, and a future implementation can accept requests and queue application work in the background.
 
 ## Current build foundation
 
 - CMake 4.0 is required by the root build.
 - C++23 is required, with compiler extensions disabled.
-- `CMakePresets.json` defines a Release preset using Ninja and selects `clang++`.
-- Configure and build artifacts go under `build/obj/`; the application executable is emitted under `build/`.
+- `CMakePresets.json` defines Release and Debug presets using Ninja and `clang++`.
+- Release and Debug build trees are `build/obj/` and `build/obj-debug/`. The corresponding executables are emitted in `build/` and `build/debug/`.
 - RmlUi and FreeType are included as Git submodules under `include/` and added to the build as source projects.
-- The current `Nexora` executable only prints a startup message and exits.
+- The desktop preview uses the Win32 or X11 OpenGL backend from RmlUi and loads assets relative to the executable.
 
 The CI configurations are build checks, not a declared support matrix. Treat a platform as supported only after its build, runtime behavior, and any distribution requirements have been verified and documented.
 
@@ -24,7 +24,7 @@ The repository currently includes two source submodules:
 - RmlUi at `include/rmlui` (pinned at commit `92f0143424a417d6566a2cd037b747b636c6ca8a`; its upstream CMake project declares version 6.4 as a development version; MIT license in `include/rmlui/LICENSE.txt`).
 - FreeType at `include/freetype` (Nexora elects to use it under the FreeType License, FTL; see `include/freetype/docs/FTL.TXT`). FreeType also offers GPLv2-or-later terms, which Nexora does not elect. Preserve its license and copyright notices when redistributing.
 
-Their exact revisions are recorded by the Git submodule entries. Both are added through their upstream CMake projects, but the application has not yet connected to their targets. No application windowing or rendering backend has been selected.
+Their exact revisions are recorded by the Git submodule entries. The desktop preview links RmlUi Core, which uses FreeType to render fonts. The preview packages the Lato fonts supplied with the RmlUi samples and their license.
 
 The README includes the FreeType Team acknowledgment required by the FTL for binary redistribution documentation. Before distributing binaries, verify that the actual release package includes this documentation and the relevant upstream license and copyright notices. Review licensing obligations again when dependency revisions, build options, or the distribution model change.
 
@@ -36,8 +36,8 @@ As the application grows, keep presentation separate from launcher operations. U
 
 ## Open decisions
 
-The repository has not yet selected an application UI framework, windowing or rendering backend, or platform support matrix. Launcher behavior and design for accounts, instance and game installation, Java runtime handling, persistence, security, and game process lifecycle also remain undecided. Resolve these choices as implementation requirements become concrete, then update this document to record the decision and its rationale. Do not treat the working principles above as a commitment to a specific library or design.
+A platform support matrix remains open. The service implementations for accounts, instance and game installation, Java runtime handling, persistence, security, and the game process lifecycle also remain open.
 
 ## Validation
 
-GitHub Actions currently builds the project on Windows (MSYS2/MinGW-w64) and Ubuntu Linux (GCC), then runs the console executable from outside the checkout. These jobs use the platform's default compiler; the separate `Release` CMake preset selects `clang++` and has not yet been validated across platforms. This CI coverage does not establish support for other operating systems or provide interactive launcher checks. Add focused tests and runtime checks as application behavior is implemented, and update the documented support matrix only after verifying the corresponding configurations.
+The GitHub Actions workflow builds on Windows with MSYS2/MinGW-w64 and on Ubuntu with GCC. It runs the UI smoke check from outside the checkout and uses Xvfb on Linux. The check covers page rendering, layout, selection, catalog filters, and preview action feedback.

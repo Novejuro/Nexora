@@ -23,7 +23,7 @@ If you already cloned without submodules, initialize them with:
 git submodule update --init --recursive
 ```
 
-The current executable is a console stub. There is no application test suite yet. Pull requests should at least build successfully; describe any manual checks in the pull request.
+Run the built Nexora executable with `--smoke-test` to check the desktop preview. The check opens a window, exercises version selection and both catalogs, and exits with its result. On Linux, use `xvfb-run -a` when running without a desktop display.
 
 ## Pull requests
 
