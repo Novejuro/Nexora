@@ -1,0 +1,6 @@
+[submodule "include/rmlui"]
+	path = include/rmlui
+	url = https://github.com/mikke89/RmlUi.git
+[submodule "include/freetype"]
+	path = include/freetype
+	url = https://github.com/freetype/freetype.git

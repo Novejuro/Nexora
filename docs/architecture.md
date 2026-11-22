@@ -1,65 +1,43 @@
 # Architecture
 
-## Decision
+## Current status
 
-Nexora Launcher will use **C++23**, **Qt 6**, **CMake**, and **QML (Qt Quick)** for its cross-platform desktop application. The target desktop platforms are Windows, Linux, and macOS.
+Nexora is in the architecture and project-foundation stage. The repository establishes a CMake build, a C++23 language baseline, output-directory conventions, a Ninja Release preset, and source dependencies. The application entry point is currently a minimal console program. No desktop window, launcher UI, or Minecraft-related behavior has been implemented. The next stage is to begin application code on top of this foundation.
 
-This is the selected project direction, not a claim that platform support or packaging is already implemented. The repository is in early development and does not yet contain an application or build system.
+Dependency presence in the build does not imply application integration: the current application target does not yet use RmlUi or FreeType. There is no windowing or graphics dependency configured at the application level.
 
-## Goals
+## Current build foundation
 
-- Provide a polished desktop interface with responsive interaction and restrained resource use.
-- Share application behavior across Windows, Linux, and macOS while isolating operating-system differences.
-- Keep the launcher maintainable as game installation, configuration, and process-management capabilities are developed.
-- Prefer established Qt and C++ facilities over introducing dependencies without a clear need.
+- CMake 4.0 is required by the root build.
+- C++23 is required, with compiler extensions disabled.
+- `CMakePresets.json` defines a Release preset using Ninja and selects `clang++`.
+- Configure and build artifacts go under `build/obj/`; the application executable is emitted under `build/`.
+- RmlUi and FreeType are included as Git submodules under `include/` and added to the build as source projects.
+- The current `Nexora` executable only prints a startup message and exits.
 
-## Technology Responsibilities
+The CI configurations are build checks, not a declared support matrix. Treat a platform as supported only after its build, runtime behavior, and any distribution requirements have been verified and documented.
 
-- **C++23** contains application and launcher-domain behavior, including configuration, filesystem operations, game preparation, and child-process management as those capabilities are implemented.
-- **Qt 6** provides the application framework and cross-platform services. Qt Quick supplies the presentation runtime.
-- **QML** defines the interface, visual states, and interaction. It should remain focused on presentation rather than owning complex launcher rules or filesystem and process operations.
-- **CMake** defines the project build, discovers Qt modules, and supports platform-specific packaging workflows as they are added.
+## Dependencies
 
-The QML interface communicates with C++ through explicit Qt interfaces such as registered types, models, properties, signals, and invokable operations. Keep those interfaces narrow and typed. C++ owns persistent state and operations with operating-system effects; QML presents state and requests user actions.
+The repository currently includes two source submodules:
 
-## Application Boundaries
+- RmlUi at `include/rmlui` (pinned at commit `92f0143424a417d6566a2cd037b747b636c6ca8a`; its upstream CMake project declares version 6.4 as a development version; MIT license in `include/rmlui/LICENSE.txt`).
+- FreeType at `include/freetype` (Nexora elects to use it under the FreeType License, FTL; see `include/freetype/docs/FTL.TXT`). FreeType also offers GPLv2-or-later terms, which Nexora does not elect. Preserve its license and copyright notices when redistributing.
 
-Organize code around responsibilities rather than exposing platform APIs throughout the interface:
+Their exact revisions are recorded by the Git submodule entries. Both are added through their upstream CMake projects, but the application has not yet connected to their targets. No application windowing or rendering backend has been selected.
 
-- **Presentation:** QML views and reusable UI components.
-- **Application layer:** coordinates user actions and launcher workflows.
-- **Domain layer:** represents launcher concepts and rules independently of QML details.
-- **Platform and infrastructure layer:** implements filesystem, process, networking, and operating-system integration behind C++ interfaces where platform behavior differs.
+The README includes the FreeType Team acknowledgment required by the FTL for binary redistribution documentation. Before distributing binaries, verify that the actual release package includes this documentation and the relevant upstream license and copyright notices. Review licensing obligations again when dependency revisions, build options, or the distribution model change.
 
-These are responsibility boundaries, not a requirement to create a large framework before the corresponding behavior exists. Keep the initial project structure proportionate to implemented features.
+## Working principles
 
-The launcher should treat the Minecraft Java runtime as an external child process. Runtime discovery or provisioning, launch arguments, process lifetime, and output handling belong to the C++ application layer; the UI should receive structured state and progress updates.
+The following are guidance for future implementation, not implemented architecture or finalized technology decisions. Keep the structure proportional to working behavior; avoid empty layers and interfaces created before a real need exists. Develop the application incrementally, with each new capability verifiable on its own.
 
-## Cross-Platform Strategy
+As the application grows, keep presentation separate from launcher operations. UI code should present structured state and report user actions, while C++ application logic owns persistent state and coordinates workflows. Filesystem access, network operations, runtime discovery, and child-process management should remain outside presentation code. Introduce platform-specific boundaries where actual platform differences require them.
 
-Use shared C++ and QML behavior by default. Isolate genuine operating-system differences in small platform-specific implementations and keep their contracts consistent. Use Qt abstractions when they cover the requirement; use native APIs only where needed and contain them behind those interfaces.
+## Open decisions
 
-Validate the actual supported configurations before making compatibility claims. In particular, test packaging and launch behavior on Windows, macOS, and representative Linux environments, including relevant display-server and graphics configurations. Qt Quick depends on the installed graphics stack, and deployment requirements vary by platform and distribution.
+The repository has not yet selected an application UI framework, windowing or rendering backend, or platform support matrix. Launcher behavior and design for accounts, instance and game installation, Java runtime handling, persistence, security, and game process lifecycle also remain undecided. Resolve these choices as implementation requirements become concrete, then update this document to record the decision and its rationale. Do not treat the working principles above as a commitment to a specific library or design.
 
-## Build and Dependency Policy
+## Validation
 
-CMake is the source of truth for configuring and building the application. Use Qt's supported CMake integration and declare required Qt modules explicitly. Pin or constrain Qt and compiler versions in the build and CI configuration once those are established.
-
-Use C++23 as the language baseline, but keep required compiler features within the intersection supported by the chosen compiler versions on all target platforms. Avoid relying on optional or unevenly implemented standard-library features without verifying them in the platform build matrix.
-
-Keep dependencies focused. Before adding a library, document the capability it supplies, its platform support, maintenance status, and licensing implications.
-
-## Licensing and Distribution
-
-Review the license terms for the selected Qt modules and every third-party dependency before distribution. Qt is available under multiple licensing models, and obligations depend on the modules, versions, and distribution choices. Document the project's chosen compliance approach before shipping binaries; this architecture decision does not itself determine a Qt license or distribution model.
-
-## Validation Before Release
-
-The following remain implementation and release work, not completed capabilities:
-
-- Build and launch on Windows, Linux, and macOS using documented compiler and Qt versions.
-- Verify QML module and Qt library deployment for each supported distribution format.
-- Exercise UI rendering, accessibility-relevant scaling, and input behavior across the target environments.
-- Test game child-process launch, exit, and error reporting without blocking the interface.
-- Measure cold startup, idle memory use, and packaged size on representative hardware, then set project-specific targets from those results.
-- Complete a Qt and dependency license review for the intended distribution model.
+GitHub Actions currently builds the project on Windows (MSYS2/MinGW-w64) and Ubuntu Linux (GCC), then runs the console executable from outside the checkout. These jobs use the platform's default compiler; the separate `Release` CMake preset selects `clang++` and has not yet been validated across platforms. This CI coverage does not establish support for other operating systems or provide interactive launcher checks. Add focused tests and runtime checks as application behavior is implemented, and update the documented support matrix only after verifying the corresponding configurations.

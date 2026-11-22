@@ -1,0 +1,15 @@
+file(GLOB_RECURSE PROJECT_FILES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp"
+)
+
+set(TARGET_NAME Nexora)
+
+add_executable(${TARGET_NAME}
+    ${PROJECT_FILES}
+)
+
+set_target_properties(${TARGET_NAME} PROPERTIES
+    OUTPUT_NAME "Nexora"
+)

@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+      - run: cmake -S . -B build/obj -G Ninja
+      - run: cmake --build build/obj --parallel
+      - name: Run executable outside the checkout
+        shell: pwsh
+        run: |
+          Set-Location $env:RUNNER_TEMP
+          & "$env:GITHUB_WORKSPACE/build/Nexora.exe"
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.0.x'
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y ninja-build g++ xorg-dev libgl1-mesa-dev
+      - run: cmake -S . -B build/obj -G Ninja
+      - run: cmake --build build/obj --parallel
+      - name: Run executable outside the checkout
+        run: cd "$RUNNER_TEMP" && "$GITHUB_WORKSPACE/build/Nexora"
