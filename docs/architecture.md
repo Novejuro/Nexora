@@ -13,7 +13,7 @@ SDL3, RmlUi, FreeType, and the RmlUi SDL/Vulkan backend are connected to the app
 - `CMakePresets.json` defines a Release preset using Ninja and leaves compiler selection to the platform toolchain.
 - Configure and build artifacts go under `build/obj/`; the application executable is emitted under `build/`.
 - SDL3, RmlUi, and FreeType are included as Git submodules under `include/` and added to the build as source projects.
-- The `Nexora` executable opens an empty SDL3/Vulkan window and runs an empty RmlUi context.
+- The `Nexora` executable opens a resizable SDL3/Vulkan window at 1280 x 720 logical pixels, with an 800 x 500 logical-pixel minimum, and runs an empty RmlUi context. The RmlUi context tracks framebuffer pixel dimensions and the window's display scale.
 
 The CI configurations are build checks, not a declared support matrix. Treat a platform as supported only after its build, runtime behavior, and any distribution requirements have been verified and documented.
 

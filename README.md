@@ -25,7 +25,7 @@ cmake --preset Release
 cmake --build --preset Release --parallel
 ```
 
-The build tree is `build/obj/`. The executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it opens an empty window. The Release build preset builds the Nexora application target only.
+The build tree is `build/obj/`. The executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it opens an empty, resizable window at 1280 x 720 logical pixels, with a minimum size of 800 x 500 logical pixels. Windows builds use the GUI subsystem and do not open a console window. The Release build preset builds the Nexora application target only.
 
 If the submodules were not initialized during clone, run:
 
