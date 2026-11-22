@@ -8,6 +8,7 @@ Nexora Launcher is an independent, early-stage project focused on a launcher for
 
 - Keep changes focused on the requested task and follow established patterns as the project grows.
 - Prefer clear, maintainable solutions over unnecessary abstractions or dependencies.
+- Treat `include/` as read-only. Never create, modify, delete, move, or rename anything under it.
 - Update documentation when user-visible behavior, setup, configuration, or supported platforms change.
 - Never add secrets, credentials, private keys, personal information, or confidential data to committed files.
 - Keep repository content, comments, and commit messages in English.

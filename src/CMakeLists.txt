@@ -18,6 +18,12 @@ target_link_libraries(${TARGET_NAME}
         rmlui_backend_SDL_VK
 )
 
+if(WIN32)
+    set_target_properties(${TARGET_NAME} PROPERTIES
+        WIN32_EXECUTABLE ON
+    )
+endif()
+
 set_target_properties(${TARGET_NAME} PROPERTIES
     OUTPUT_NAME "Nexora"
 )
