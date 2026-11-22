@@ -7,7 +7,6 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_TRY_COMPILE_CONFIGURATION": "Release",
-                "CMAKE_CXX_COMPILER": "clang++",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/"
             }
         },
@@ -25,7 +24,8 @@
     "buildPresets": [
         {
             "name": "Release",
-            "configurePreset": "Release"
+            "configurePreset": "Release",
+            "targets": ["Nexora"]
         }
     ]
 }

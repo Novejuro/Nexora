@@ -1,6 +1,6 @@
-#include <iostream>
+#include "app/App.hpp"
 
-int main() {
-	std::cout << "This is Nexora Launcher!" << std::endl;
-	return 0;
+auto main() -> int {
+	Nexora::App app;
+	return app.run();
 }

@@ -1,4 +1,3 @@
 {
-    "cmake.useCMakePresets": "never",
-    "cmake.buildDirectory": "${workspaceFolder}/build/obj"
+    "cmake.useCMakePresets": "always"
 }

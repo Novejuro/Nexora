@@ -1,10 +1,10 @@
 # Nexora Launcher
 
-Nexora Launcher is an independent early-stage project for a Minecraft launcher. The project is currently building its application and dependency architecture; feature implementation is the next stage. The only application code today is a minimal C++ entry point that prints a message and exits. There is no launcher interface or Minecraft workflow yet.
+Nexora Launcher is an independent early-stage project for a Minecraft launcher. Its current application opens an empty SDL3 window rendered through RmlUi's Vulkan backend. Launcher interface and Minecraft workflows have not been implemented yet.
 
 ## Project status
 
-The repository has a CMake-based C++23 build, a Release preset using Ninja and `clang++`, and vendored Git submodules for RmlUi and FreeType. These dependencies are present in the build configuration, but the application does not use them yet. Window management, rendering, launcher layers, account management, game installation, Java runtime handling, and game launching have not been implemented.
+The repository has a CMake-based C++23 build, a Release preset using Ninja and the platform's default compiler, and Git submodules for SDL3, RmlUi, and FreeType. Nexora uses SDL3 for its window and RmlUi's SDL/Vulkan backend for rendering. Launcher layers, account management, game installation, Java runtime handling, and game launching have not been implemented.
 
 See [docs/architecture.md](docs/architecture.md) for the current foundation, intended boundaries, and work remaining before feature development.
 
@@ -14,8 +14,9 @@ Requirements:
 
 - CMake 4.0 or newer
 - Ninja
-- A C++23-capable compiler (`clang++` is selected by the supplied preset)
-- Initialized Git submodules (`include/rmlui` and `include/freetype`)
+- A C++23-capable compiler
+- Vulkan-capable graphics support at runtime. macOS requires a Vulkan implementation such as MoltenVK.
+- Initialized Git submodules (`include/sdl`, `include/rmlui`, and `include/freetype`)
 
 Configure and build the Release preset from the repository root:
 
@@ -24,7 +25,7 @@ cmake --preset Release
 cmake --build --preset Release --parallel
 ```
 
-The build tree is `build/obj/`. The current executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it prints `This is Nexora Launcher!` and exits. The preset has not yet been validated as a supported build configuration across platforms; platform support will be documented after builds are tested.
+The build tree is `build/obj/`. The executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it opens an empty window. The Release build preset builds the Nexora application target only.
 
 If the submodules were not initialized during clone, run:
 

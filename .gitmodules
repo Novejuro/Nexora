@@ -4,3 +4,6 @@
 [submodule "include/freetype"]
 	path = include/freetype
 	url = https://github.com/freetype/freetype.git
+[submodule "include/sdl"]
+	path = include/sdl
+	url = https://github.com/libsdl-org/SDL.git
