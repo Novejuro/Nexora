@@ -1,0 +1,140 @@
+import {
+    Action,
+    Label
+} from "Controls.slint";
+
+export enum Page {
+    play,
+    installations,
+    settings
+}
+
+component Logo inherits Image {
+    width: 28px;
+    height: 28px;
+    source: @image-url("logo.svg");
+}
+
+component Tab inherits Action {
+    accessible-label: root.caption;
+    border-width: 0px;
+    in property <string> caption;
+    in property <bool> selected;
+    width: bold-caption.preferred-width + 28px;
+    bold-caption := Label {
+        text: root.caption;
+        font-weight: 700;
+        visible: false;
+    }
+    Label {
+        text: root.caption;
+        color: {
+            if root.selected {
+                return #245e45;
+            }
+            if root.focused {
+                return #23312c;
+            }
+            return #63706a;
+        }
+        font-weight: {
+            if root.selected {
+                return 700;
+            }
+            return 450;
+        }
+        horizontal-alignment: center;
+    }
+    if selected : Rectangle {
+        x: 14px;
+        y: parent.height - self.height;
+        width: parent.width - 28px;
+        height: 2px;
+        background: #337856;
+    }
+}
+
+export component Toolbar inherits Rectangle {
+    in property <length> gutter;
+    in-out property <Page> page;
+    in property <string> account-name;
+    callback account-requested();
+    x: 0px;
+    y: 0px;
+    height: 64px;
+    background: #ffffff;
+    Rectangle {
+        y: parent.height - 1px;
+        height: 1px;
+        background: #dce3dd;
+    }
+    HorizontalLayout {
+        x: 0px;
+        width: parent.width;
+        height: parent.height;
+        padding-left: root.gutter;
+        padding-right: root.gutter;
+        spacing: 8px;
+        HorizontalLayout {
+            spacing: 9px;
+            Rectangle {
+                width: 28px;
+                Logo {
+                    y: (parent.height - self.height) / 2;
+                }
+            }
+            Label {
+                text: "Nexora";
+                font-size: 21px;
+                font-weight: 700;
+            }
+        }
+        Rectangle {
+            width: 18px;
+        }
+        Tab {
+            caption: @tr("MainWindow" => "Play");
+            selected: root.page == Page.play;
+            activated => {
+                root.page = Page.play;
+            }
+        }
+        Tab {
+            caption: @tr("MainWindow" => "Installations");
+            selected: root.page == Page.installations;
+            activated => {
+                root.page = Page.installations;
+            }
+        }
+        Tab {
+            caption: @tr("MainWindow" => "Settings");
+            selected: root.page == Page.settings;
+            activated => {
+                root.page = Page.settings;
+            }
+        }
+        Rectangle {
+            horizontal-stretch: 1;
+        }
+        Action {
+            accessible-label: account-label.text;
+            width: min(account-label.preferred-width, 160px) + 20px;
+            activated => {
+                root.account-requested();
+            }
+            account-label := Label {
+                x: 10px;
+                width: parent.width - 20px;
+                text: {
+                    if root.account-name == "" {
+                        return @tr("MainWindow" => "Account");
+                    }
+                    return root.account-name;
+                }
+                overflow: elide;
+                horizontal-alignment: center;
+                font-weight: 600;
+            }
+        }
+    }
+}

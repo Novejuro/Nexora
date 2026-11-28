@@ -1,0 +1,91 @@
+import {
+    Label
+} from "Controls.slint";
+import {
+    Page,
+    Toolbar
+} from "Toolbar.slint";
+
+component Landscape inherits Rectangle {
+    background: #e0ebe1;
+    clip: true;
+    Image {
+        source: @image-url("landscape.svg");
+        width: min(parent.width, parent.height * 2.5);
+        height: self.width / 2.5;
+        x: parent.width - self.width;
+        y: parent.height - self.height;
+    }
+}
+
+export component MainWindow inherits Window {
+    private property <Page> page: Page.play;
+    in property <string> account-name;
+    callback account-requested();
+    title: "Nexora";
+    preferred-width: 1280px;
+    preferred-height: 720px;
+    min-width: 800px;
+    min-height: 500px;
+    background: #f7f9f7;
+    private property <float> horizontal-room: clamp((root.width - 800px) / 480px, 0, 1);
+    private property <float> vertical-room: clamp((root.height - 500px) / 220px, 0, 1);
+    private property <length> gutter: 28px + 20px * horizontal-room;
+
+    toolbar := Toolbar {
+        width: root.width;
+        gutter: root.gutter;
+        page <=> root.page;
+        account-name: root.account-name;
+        account-requested => {
+            root.account-requested();
+        }
+    }
+
+    VerticalLayout {
+        x: root.gutter;
+        y: toolbar.height;
+        width: root.width - 2 * root.gutter;
+        height: root.height - toolbar.height;
+        padding-top: 16px + 12px * root.vertical-room;
+        padding-bottom: 20px + 12px * root.vertical-room;
+        spacing: 12px + 8px * root.vertical-room;
+
+        Label {
+            text: {
+                if root.page == Page.play {
+                    return @tr("Play");
+                }
+                if root.page == Page.installations {
+                    return @tr("Installations");
+                }
+                return @tr("Settings");
+            }
+            font-size: 28px;
+            font-weight: 700;
+        }
+        if root.page == Page.play : Landscape {
+            vertical-stretch: 1;
+            VerticalLayout {
+                x: root.gutter;
+                width: 45%;
+                alignment: center;
+                spacing: 4px;
+                Label {
+                    text: "Minecraft";
+                    color: #1e4132;
+                    font-size: 42px;
+                    font-weight: 750;
+                }
+                Label {
+                    text: @tr("Java Edition");
+                    color: #42664f;
+                    font-size: 18px;
+                }
+            }
+        }
+        if root.page != Page.play : Rectangle {
+            vertical-stretch: 1;
+        }
+    }
+}

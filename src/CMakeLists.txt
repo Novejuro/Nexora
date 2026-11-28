@@ -7,15 +7,26 @@ set(TARGET_NAME Nexora)
 
 add_executable(${TARGET_NAME}
     main.cpp
-    app/App.hpp
     app/App.cpp
+    core/MessageBox/MessageBox.cpp
     # ${PROJECT_FILES} # Add Scanned Files
 )
 
 target_link_libraries(${TARGET_NAME}
     PRIVATE
         RmlUi::RmlUi
-        rmlui_backend_SDL_VK
+        rmlui_backend_SDL_GL3
+        Slint::Slint
+)
+
+slint_target_sources(${TARGET_NAME}
+    "${PROJECT_SOURCE_DIR}/assets/ui"
+)
+
+target_include_directories(${TARGET_NAME}
+    PRIVATE
+        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/include
 )
 
 if(WIN32)

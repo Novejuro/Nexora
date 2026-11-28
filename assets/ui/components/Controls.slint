@@ -1,0 +1,40 @@
+export component Label inherits Text {
+    color: #23312c;
+    font-size: 14px;
+    vertical-alignment: center;
+}
+
+export component Action inherits Rectangle {
+    callback activated();
+    accessible-role: button;
+    accessible-action-default => {
+        root.activated();
+    }
+    forward-focus: focus;
+    out property <bool> focused: focus.has-focus;
+    border-width: {
+        if focus.has-focus {
+            return 2px;
+        }
+        return 0px;
+    }
+    border-color: #337856;
+    focus := FocusScope {
+        key-pressed(event) => {
+            if (event.text == Key.Return || event.text == " ") {
+                if (!event.repeat) {
+                    root.activated();
+                }
+                return accept;
+            }
+            return reject;
+        }
+    }
+    TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            focus.focus();
+            root.activated();
+        }
+    }
+}

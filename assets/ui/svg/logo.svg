@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+    <title>Nexora</title>
+    <!-- The two inner contours leave the top and left faces transparent. -->
+    <path fill="#28634b" fill-rule="evenodd" d="
+        M14 1 L26 7.5 V20.5 L14 27 L2 20.5 V7.5 Z
+        M5 8.5 L14 13.5 L23 8.5 L14 3.5 Z
+        M4.5 10.5 V19 L12.8 23.8 V15.2 Z
+    "/>
+</svg>

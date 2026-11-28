@@ -1,0 +1,8 @@
+{
+    "edition": "1.19",
+    "main": "MainWindow.slint",
+    "include-paths": [
+        "svg",
+        "components"
+    ]
+}
