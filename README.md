@@ -1,49 +1,50 @@
 # Nexora Launcher
 
-Nexora Launcher is an independent early-stage project for a Minecraft launcher. Its current application opens an empty SDL3 window rendered through RmlUi's Vulkan backend. Launcher interface and Minecraft workflows have not been implemented yet.
+Nexora is an independent, early-stage Minecraft launcher project. The current work focuses on the desktop interface. Account sign-in, game installation, Java runtime management, and game launching are still planned.
+
+[![Made with Slint](https://raw.githubusercontent.com/slint-ui/slint/02bb0be28ad031bb84240ae752561f508e1e18e4/logo/MadeWithSlint-logo-whitebg.png)](https://slint.dev/)
 
 ## Project status
 
-The repository has a CMake-based C++23 build, a Release preset using Ninja and the platform's default compiler, and Git submodules for SDL3, RmlUi, and FreeType. Nexora uses SDL3 for its window and RmlUi's SDL/Vulkan backend for rendering. Launcher layers, account management, game installation, Java runtime handling, and game launching have not been implemented.
-
-See [docs/architecture.md](docs/architecture.md) for the current foundation, intended boundaries, and work remaining before feature development.
+The Slint desktop interface has three tabs. Play displays a block-style landscape illustration. Installations and Settings currently show only their page headings. See the [architecture notes](docs/architecture.md) for how Nexora creates the window and which dependencies it builds.
 
 ## Build
 
-Requirements:
+Install Git, CMake 4.0 or newer, Ninja, a C++23-capable Clang toolchain, and Rust 1.95 or newer with Cargo. On Windows, use the MSYS2 CLANG64 environment with a MinGW-w64-compatible Rust target. On macOS, use Apple Clang. On Linux, install the development libraries for the selected window and rendering backends. The Ubuntu workflow installs `xorg-dev` and `libgl1-mesa-dev`.
 
-- CMake 4.0 or newer
-- Ninja
-- A C++23-capable compiler
-- Vulkan-capable graphics support at runtime. macOS requires a Vulkan implementation such as MoltenVK.
-- Initialized Git submodules (`include/sdl`, `include/rmlui`, and `include/freetype`)
+If you previously built with GCC in this checkout, move or delete the old `build/` directory before configuring with Clang.
 
-Configure and build the Release preset from the repository root:
-
-```sh
-cmake --preset Release
-cmake --build --preset Release --parallel
-```
-
-The build tree is `build/obj/`. The executable is written to `build/Nexora` (or `build/Nexora.exe` on Windows). Running it opens an empty, resizable window at 1280 x 720 logical pixels, with a minimum size of 800 x 500 logical pixels. Windows builds use the GUI subsystem and do not open a console window. The Release build preset builds the Nexora application target only.
-
-If the submodules were not initialized during clone, run:
+From the repository root, initialize the pinned dependencies and configure a fresh build tree. The shared Release preset selects Ninja. Pass both compiler names explicitly to select Clang.
 
 ```sh
 git submodule update --init --recursive
+cmake --preset Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+cmake --build --preset Release --parallel
 ```
+
+Expect network access on the first build for submodules, SDL3_image 3.4.8, Cargo dependencies, and Corrosion if a suitable installation is unavailable. A local SDL3_image source tree can be supplied with `-DFETCHCONTENT_SOURCE_DIR_SDL3_IMAGE=<path>`. The Release build preset targets `Nexora`. The executable is written to `build/Nexora` or `build/Nexora.exe`.
 
 ## Contributing
 
-Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening an issue or pull request. Community participation is covered by the [Code of Conduct](CODE_OF_CONDUCT.md); please report security issues using [SECURITY.md](SECURITY.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for development and review expectations. Community participation is covered by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-This project is licensed under the [Apache License 2.0](LICENSE). Third-party components have their own license terms: RmlUi's main license is [MIT](include/rmlui/LICENSE.txt), and FreeType is used under the [FreeType License (FTL)](include/freetype/docs/FTL.TXT). Some dependency files have additional notices retained alongside their source. This software is based in part on the work of the FreeType Team (https://freetype.org). Preserve the relevant upstream license and copyright notices when redistributing these components.
+Nexora's own code is licensed under the [Apache License 2.0](LICENSE). Third-party components and assets retain their respective terms.
+
+| Component | Terms used by Nexora |
+| --- | --- |
+| Slint framework | [Slint Royalty-free Desktop, Mobile, and Web Applications License 2.0](https://github.com/slint-ui/slint/blob/02bb0be28ad031bb84240ae752561f508e1e18e4/LICENSES/LicenseRef-Slint-Royalty-free-2.0.md) for integration in the desktop application. The [upstream license overview](https://github.com/slint-ui/slint/blob/02bb0be28ad031bb84240ae752561f508e1e18e4/LICENSE.md) explains the GPLv3 and commercial alternatives. |
+| SDL3 and SDL3_image | zlib license for [SDL3](https://github.com/libsdl-org/SDL/blob/c8da179691f909734cd1b124c930e49311428996/LICENSE.txt) and [SDL3_image](https://github.com/libsdl-org/SDL_image/blob/release-3.4.8/LICENSE.txt). |
+| RmlUi | [MIT](https://github.com/mikke89/RmlUi/blob/92f0143424a417d6566a2cd037b747b636c6ca8a/LICENSE.txt). Additional notices apply to some bundled files. |
+| FreeType | [FreeType License](https://github.com/freetype/freetype/blob/4fc22c56fca863d74aba9208c31e15aac4299d1d/docs/FTL.TXT). This software is based in part on the work of the FreeType Team (https://freetype.org). |
+| Noto Sans CJK SC font | [SIL Open Font License 1.1](assets/font/OFL.txt). Retain the font's copyright notice and license when redistributing it. |
+
+For Slint attribution, Nexora uses the upstream badge on its public project page. When publishing binaries, keep the badge easily visible on a public page, preferably the download page. The selected license covers Slint integrated in the desktop application and restricts standalone redistribution and applications that expose Slint APIs. Preserve upstream notices and include the licenses and acknowledgments required by the components actually shipped.
 
 ## Issues
 
-Use [GitHub Issues](https://github.com/Novejuro/Nexora/issues) for bugs and feature proposals. Do not post security vulnerability details publicly; see [SECURITY.md](SECURITY.md) for private reporting.
+Use [GitHub Issues](https://github.com/Novejuro/Nexora/issues) for bugs and feature proposals. Report vulnerabilities privately using [SECURITY.md](SECURITY.md).
 
 ## Disclaimer
 
