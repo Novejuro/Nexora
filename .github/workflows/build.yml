@@ -36,7 +36,7 @@ jobs:
           cmake-version: '4.0.x'
       - name: Install build dependencies
         run: sudo apt-get update && sudo apt-get install -y ninja-build clang xorg-dev libgl1-mesa-dev
-      - run: cmake --preset Release
+      - run: cmake --preset Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
       - run: cmake --build --preset Release --parallel
 
   macos:
