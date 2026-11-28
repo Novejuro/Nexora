@@ -16,12 +16,12 @@ jobs:
           submodules: recursive
       - uses: msys2/setup-msys2@v2
         with:
-          msystem: MINGW64
+          msystem: CLANG64
           update: true
           install: >-
-            mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
+            mingw-w64-clang-x86_64-toolchain
+            mingw-w64-clang-x86_64-cmake
+            mingw-w64-clang-x86_64-ninja
       - run: cmake --preset Release
       - run: cmake --build --preset Release --parallel
 
@@ -35,7 +35,7 @@ jobs:
         with:
           cmake-version: '4.0.x'
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y ninja-build g++ xorg-dev libgl1-mesa-dev
+        run: sudo apt-get update && sudo apt-get install -y ninja-build clang xorg-dev libgl1-mesa-dev
       - run: cmake --preset Release
       - run: cmake --build --preset Release --parallel
 
