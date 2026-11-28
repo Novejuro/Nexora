@@ -7,3 +7,6 @@
 [submodule "include/sdl"]
 	path = include/sdl
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "include/slint"]
+	path = include/slint
+	url = https://github.com/slint-ui/slint.git
