@@ -10,7 +10,7 @@ The Slint desktop interface has three tabs. Play displays a block-style landscap
 
 ## Build
 
-Install Git, CMake 4.0 or newer, Ninja, a C++23-capable Clang toolchain, and Rust 1.95 or newer with Cargo. On Windows, use the MSYS2 CLANG64 environment with a MinGW-w64-compatible Rust target. On macOS, use Apple Clang. On Linux, install the development libraries for the selected window and rendering backends. The Ubuntu workflow installs `xorg-dev` and `libgl1-mesa-dev`.
+Install Git, CMake 4.0 or newer, Ninja, a C++23-capable Clang toolchain, and Rust 1.95 or newer with Cargo. On Windows, the MSYS2 CLANG64 package `mingw-w64-clang-x86_64-rust` provides a compatible Rust compiler and Cargo. On macOS, use Apple Clang and the OpenGL framework from the macOS SDK. On Ubuntu, install `xorg-dev`, `libgl1-mesa-dev`, and `libfontconfig1-dev`.
 
 If you previously built with GCC in this checkout, move or delete the old `build/` directory before configuring with Clang.
 

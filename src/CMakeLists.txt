@@ -19,6 +19,14 @@ target_link_libraries(${TARGET_NAME}
         Slint::Slint
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    find_package(Fontconfig REQUIRED)
+    target_link_libraries(slint_cpp INTERFACE Fontconfig::Fontconfig)
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(slint_cpp INTERFACE OpenGL::GL)
+endif()
+
 slint_target_sources(${TARGET_NAME}
     "${PROJECT_SOURCE_DIR}/assets/ui"
 )
